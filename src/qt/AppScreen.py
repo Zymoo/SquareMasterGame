@@ -11,18 +11,19 @@ from src.common.Commons import *
 class AppScreen(QWidget):
     def __init__(self):
         super().__init__()
-
         self.setWindowTitle("Mistrz szachownicy QT")
+
         self.timeCounter = TIME_LIMIT
         self.gameFlag = False
         self.bar = None
         self.engine = AppModel()
+
         self.mainLayout = QVBoxLayout()
-        self.setMinimumSize(800, 800)
+        self.setMinimumSize(800, 900)
         self._OverviewSetUp()
         self._boardSetUp()
         self._progressSetUp()
-        self._startButtonSetUp()
+        self._menuSetUp()
         self._statsSetUp()
 
         self.setLayout(self.mainLayout)
@@ -82,7 +83,7 @@ class AppScreen(QWidget):
         self.stats.addWidget(self.coord)
         self.mainLayout.addLayout(self.stats)
 
-    def _startButtonSetUp(self):
+    def _menuSetUp(self):
         style = """ 
         border-style: solid;
         border-color: gray;
@@ -90,11 +91,24 @@ class AppScreen(QWidget):
         border-radius: 10px;
         background: cornsilk;
         selection-background-color: darkgray;"""
+
+        self.menu = QHBoxLayout()
+
         self.startButton = QPushButton('Start', self)
         self.startButton.setStyleSheet(style)
         self.startButton.setMinimumHeight(40)
-        self.mainLayout.addWidget(self.startButton)
         self.startButton.clicked.connect(self._onButtonStart)
+
+        self.stopButton = QPushButton('Stop', self)
+        self.stopButton.setStyleSheet(style)
+        self.stopButton.setMinimumHeight(40)
+        self.stopButton.clicked.connect(self._onButtonStop)
+        self.stopButton.setEnabled(False)
+
+        self.menu.addWidget(self.startButton)
+        self.menu.addWidget(self.stopButton)
+
+        self.mainLayout.addLayout(self.menu)
 
     def _progressSetUp(self):
         self.progress = QProgressBar(self)
@@ -138,7 +152,7 @@ class AppScreen(QWidget):
         if self.gameFlag:
             return
         self.startButton.setEnabled(False)
-        self.startButton.setText("Start")
+        self.stopButton.setEnabled(True)
         self.gameFlag = True
 
         self.timeCounter = TIME_LIMIT
@@ -151,8 +165,16 @@ class AppScreen(QWidget):
         self.coord.setText(self.engine.getCurrentNotation())
         self.score.setText("0")
 
+    def _onButtonStop(self):
+        if not self.gameFlag:
+            return
+        self.bar.stop()
+        self.stopButton.setEnabled(False)
+        self.startButton.setEnabled(True)
+        self.gameFlag = False
+
     def _onClockChanged(self):
-        if self.timeCounter == 0:
+        if (self.timeCounter == 0) or (self.gameFlag is False):
             self.startButton.setEnabled(True)
             self.gameFlag = False
         self.timeCounter -= 1

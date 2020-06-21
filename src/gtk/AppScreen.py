@@ -7,38 +7,36 @@ from gi.repository import Gtk, GLib, Gdk
 
 from src.common.AppModel import AppModel
 
-rgba_white = Gdk.RGBA.from_color(Gdk.color_parse('#faf0e6'))
-rgba_black = Gdk.RGBA.from_color(Gdk.color_parse('#a0522d'))
-rgba_green = Gdk.RGBA.from_color(Gdk.color_parse('green'))
-rgba_red = Gdk.RGBA.from_color(Gdk.color_parse('red'))
-
 
 class AppScreen(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self, title="Mistrz szachownicy GTK")
+
         self.engine = AppModel()
         self.gameFlag = False
         self.timeCounter = TIME_LIMIT
 
-        self.set_default_size(800, 800)
-
-        self.box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        self.set_default_size(800, 900)
+        self.set_size_request(800, 900)
+        self.box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         self.add(self.box)
         self._OverviewSetUp()
         self._boardSetUp()
-        self.progressbar = Gtk.ProgressBar()
-        self.box.pack_start(self.progressbar, True, True, 0)
-        self._startButtonSetUp()
+        self._progressBarSetUp()
+        self._menuSetUp()
         self._statsSetUp()
         self._makeItPretty()
 
     def _makeItPretty(self):
         css = b"""
-        
         button {
             border-style: solid;
             border-color: gray;
             border-width: 1px;
+        }
+        
+        button:disabled * {
+            color:gray
         }
         
         #overview {
@@ -56,14 +54,14 @@ class AppScreen(Gtk.Window):
             border: 2px solid gray;
             padding: 0px;
             border-radius: 10px;
-            margin: 8px;
+            margin: 4px;
             background: cornsilk;
             min-height: 40px;
         }
         
-        #start {
+        #menu {
             color: black;
-            margin: 8px;
+            margin: 4px;
             padding: 0px;
             border-style: solid;
             border-color: gray;
@@ -79,7 +77,8 @@ class AppScreen(Gtk.Window):
         
         progressbar, trough {
             min-height: 20px;
-            margin: 8px;
+            margin: 2px;
+            padding: 2px;
         }
         
         #whitesquare {
@@ -98,7 +97,13 @@ class AppScreen(Gtk.Window):
             background: green;
         }
         
+        #boxframe {
+            padding: 10px;
+        }
+        
         """
+
+        self.box.set_name("boxframe")
 
         self.overview.set_name("overview")
 
@@ -106,7 +111,8 @@ class AppScreen(Gtk.Window):
         self.score.set_name("stats")
         self.coordStatic.set_name("stats")
         self.coord.set_name("stats")
-        self.startButton.set_name("start")
+        self.startButton.set_name("menu")
+        self.stopButton.set_name("menu")
 
         css_provider = Gtk.CssProvider()
         css_provider.load_from_data(css)
@@ -115,9 +121,12 @@ class AppScreen(Gtk.Window):
         context.add_provider_for_screen(screen, css_provider,
                                         Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
+    def _progressBarSetUp(self):
+        self.progressbar = Gtk.ProgressBar()
+        self.box.pack_start(self.progressbar, False, False, 0)
 
     def _OverviewSetUp(self):
-        self.overviewBox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        self.overviewBox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
         self.overview = Gtk.Label(OVERVIEW_TEXT)
 
         self.overview.set_line_wrap(True)
@@ -138,10 +147,19 @@ class AppScreen(Gtk.Window):
         self.stats.add(self.coord)
         self.box.pack_start(self.stats, False, False, 0)
 
-    def _startButtonSetUp(self):
+    def _menuSetUp(self):
+        self.menu = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, homogeneous=True)
+
         self.startButton = Gtk.Button("Start")
         self.startButton.connect("clicked", self._onStartClick)
-        self.box.pack_start(self.startButton, False, False, 0)
+        self.menu.add(self.startButton)
+
+        self.stopButton = Gtk.Button("Stop")
+        self.stopButton.connect("clicked", self._onStopClick)
+        self.stopButton.set_sensitive(False)
+        self.menu.add(self.stopButton)
+
+        self.box.pack_start(self.menu, False, False, 0)
 
     def _boardSetUp(self):
         self.gameBox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
@@ -168,7 +186,7 @@ class AppScreen(Gtk.Window):
         if self.gameFlag:
             return
         self.startButton.set_sensitive(False)
-        self.startButton.set_label("Start")
+        self.stopButton.set_sensitive(True)
         self.gameFlag = True
         self.timeout_id = GLib.timeout_add(TIME_INTERVAL, self._onClockChanged)
         self.timeCounter = TIME_LIMIT
@@ -178,8 +196,14 @@ class AppScreen(Gtk.Window):
         self.coord.set_label(self.engine.getCurrentNotation())
         self.score.set_label("0")
 
+    def _onStopClick(self, btn):
+        if not self.gameFlag:
+            return
+        self.stopButton.set_sensitive(False)
+        self.gameFlag = False
+
     def _onClockChanged(self):
-        if self.timeCounter == 0:
+        if (self.timeCounter == 0) or (self.gameFlag is False):
             self.startButton.set_sensitive(True)
             self.gameFlag = False
             return False
