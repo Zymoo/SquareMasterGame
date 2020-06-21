@@ -1,6 +1,6 @@
 import gi
 
-from src.common.CommonDefs import *
+from src.common.Commons import *
 
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, GLib, Gdk
@@ -117,12 +117,6 @@ class AppScreen(Gtk.Window):
         # self.startButton.setMaximumHeight(40)
         self.box.pack_start(self.startButton, True, True, 0)
 
-    def _getY(self, number):
-        return number % 8
-
-    def _getX(self, number):
-        return number // 8
-
     def _boardSetUp(self):
         self.grid = Gtk.Grid()
         self.grid.set_size_request(560, 560)
@@ -136,8 +130,8 @@ class AppScreen(Gtk.Window):
             newButton.set_vexpand(True)
             newButton.connect("pressed", self._onSquareClick)
             newButton.connect("released", self._onSquareRelease)
-            x = self._getX(i)
-            y = self._getY(i)
+            x = getX(i)
+            y = getY(i)
             if (x + y) % 2 == 0:
                 newButton.override_background_color(0, rgba_white)
             else:

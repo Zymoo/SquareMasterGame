@@ -5,7 +5,7 @@ from PySide2.QtWidgets import QVBoxLayout, QGridLayout, QProgressBar, QPushButto
     QSizePolicy, QButtonGroup, QHBoxLayout, QLabel, QWidget
 
 from src.common.AppModel import AppModel
-from src.common.CommonDefs import *
+from src.common.Commons import *
 
 
 class AppScreen(QWidget):
@@ -99,12 +99,6 @@ class AppScreen(QWidget):
         self.mainLayout.addWidget(self.progress)
         self.progress.setMaximum(TIME_LIMIT)
 
-    def _getY(self, number):
-        return number % 8
-
-    def _getX(self, number):
-        return number // 8
-
     def _boardSetUp(self):
         frameWidget = QWidget()
         frameLayout = QHBoxLayout()
@@ -120,8 +114,8 @@ class AppScreen(QWidget):
             newButton = QPushButton()
             policy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
             newButton.setSizePolicy(policy)
-            x = self._getX(i)
-            y = self._getY(i)
+            x = getX(i)
+            y = getY(i)
             if (x + y) % 2 == 0:
                 newButton.setStyleSheet("background-color: linen")
             else:
@@ -161,8 +155,8 @@ class AppScreen(QWidget):
         if not self.gameFlag:
             return
         i = self.squares.id(btn)
-        x = self._getX(i)
-        y = self._getY(i)
+        x = getX(i)
+        y = getY(i)
 
         if self.engine.getCurrentPosition() == (x, y):
             btn.setStyleSheet("background-color: green")
@@ -175,8 +169,8 @@ class AppScreen(QWidget):
 
     def _onSquareRelease(self, btn):
         i = self.squares.id(btn)
-        x = self._getX(i)
-        y = self._getY(i)
+        x = getX(i)
+        y = getY(i)
         if (x + y) % 2 == 0:
             btn.setStyleSheet("background-color: linen")
         else:

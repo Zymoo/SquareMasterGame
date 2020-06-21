@@ -5,3 +5,11 @@ OVERVIEW_TEXT = ("Witaj! Gra polega na poprawnym wybraniu jak największej liczb
                  " Prawdopodobnie zauważyłeś, że szachownica jest ustawiona z punktu widzenia białych."
                  " Współrzędne kolejnych pól będą wyświetlane w prawym dolnym rogu ekranu. Zacznij grę klikając 'Start'"
                  ". Powodzenia!")
+
+
+def getY(number):
+    return number % 8
+
+
+def getX(number):
+    return number // 8
