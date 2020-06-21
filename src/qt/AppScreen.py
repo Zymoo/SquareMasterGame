@@ -12,12 +12,13 @@ class AppScreen(QWidget):
     def __init__(self):
         super().__init__()
 
+        self.setWindowTitle("Mistrz szachownicy QT")
         self.timeCounter = TIME_LIMIT
         self.gameFlag = False
         self.bar = None
         self.engine = AppModel()
         self.mainLayout = QVBoxLayout()
-        self.setMinimumSize(600, 800)
+        self.setMinimumSize(800, 800)
         self._OverviewSetUp()
         self._boardSetUp()
         self._progressSetUp()
@@ -32,12 +33,11 @@ class AppScreen(QWidget):
         border-radius: 10px;
         padding: 8px;
         background: cornsilk;"""
-        overviewLayout = QVBoxLayout()
+        overviewLayout = QHBoxLayout()
         self.overview = QLabel(OVERVIEW_TEXT)
         self.overview.setWordWrap(True)
         font = QFont("Arial", 11)
         self.overview.setFont(font)
-        self.overview.setAlignment(QtCore.Qt.AlignJustify)
 
         self.overview.setStyleSheet(style)
         overviewLayout.addWidget(self.overview)
@@ -53,21 +53,25 @@ class AppScreen(QWidget):
         self.stats = QHBoxLayout()
 
         self.scoreStatic = QLabel("Aktualny wynik:")
+        self.scoreStatic.setMinimumHeight(40)
         self.scoreStatic.setMaximumHeight(40)
         self.scoreStatic.setStyleSheet(style)
         self.scoreStatic.setAlignment(QtCore.Qt.AlignCenter)
 
         self.score = QLabel("0")
+        self.score.setMinimumHeight(40)
         self.score.setMaximumHeight(40)
         self.score.setStyleSheet(style)
         self.score.setAlignment(QtCore.Qt.AlignCenter)
 
         self.coordStatic = QLabel("Znajdź:")
+        self.coordStatic.setMinimumHeight(40)
         self.coordStatic.setMaximumHeight(40)
         self.coordStatic.setStyleSheet(style)
         self.coordStatic.setAlignment(QtCore.Qt.AlignCenter)
 
         self.coord = QLabel("")
+        self.coord.setMinimumHeight(40)
         self.coord.setMaximumHeight(40)
         self.coord.setStyleSheet(style)
         self.coord.setAlignment(QtCore.Qt.AlignCenter)

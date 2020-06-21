@@ -15,12 +15,12 @@ rgba_red = Gdk.RGBA.from_color(Gdk.color_parse('red'))
 
 class AppScreen(Gtk.Window):
     def __init__(self):
-        Gtk.Window.__init__(self, title="Hello World")
+        Gtk.Window.__init__(self, title="Mistrz szachownicy GTK")
         self.engine = AppModel()
         self.gameFlag = False
         self.timeCounter = TIME_LIMIT
 
-        self.set_default_size(600, 800)
+        self.set_default_size(800, 800)
 
         self.box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.add(self.box)
@@ -34,7 +34,15 @@ class AppScreen(Gtk.Window):
 
     def _makeItPretty(self):
         css = b"""
+        
+        button {
+            border-style: solid;
+            border-color: gray;
+            border-width: 1px;
+        }
+        
         #overview {
+            color: black;
             border: 2px solid gray;
             border-radius: 10px;
             margin: 8px;
@@ -44,6 +52,7 @@ class AppScreen(Gtk.Window):
         }
         
         #stats {
+            color: black;
             border: 2px solid gray;
             padding: 0px;
             border-radius: 10px;
@@ -53,6 +62,7 @@ class AppScreen(Gtk.Window):
         }
         
         #start {
+            color: black;
             margin: 8px;
             padding: 0px;
             border-style: solid;
@@ -67,17 +77,32 @@ class AppScreen(Gtk.Window):
             min-height: 20px;
         }
         
-            progressbar, trough {
+        progressbar, trough {
             min-height: 20px;
             margin: 8px;
         }
-    
+        
+        #whitesquare {
+            background: linen;
+        }
+        
+        #blacksquare {
+            background: sienna;
+        }
+        
+        #redsquare {
+            background: red;
+        }
+        
+        #greensquare {
+            background: green;
+        }
+        
         """
 
         self.overview.set_name("overview")
 
         self.scoreStatic.set_name("stats")
-        self.scoreStatic.set_justify(Gtk.Justification.LEFT)
         self.score.set_name("stats")
         self.coordStatic.set_name("stats")
         self.coord.set_name("stats")
@@ -89,6 +114,7 @@ class AppScreen(Gtk.Window):
         screen = Gdk.Screen.get_default()
         context.add_provider_for_screen(screen, css_provider,
                                         Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+
 
     def _OverviewSetUp(self):
         self.overviewBox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
@@ -110,19 +136,19 @@ class AppScreen(Gtk.Window):
         self.stats.add(self.score)
         self.stats.add(self.coordStatic)
         self.stats.add(self.coord)
-        self.box.pack_start(self.stats, True, True, 0)
+        self.box.pack_start(self.stats, False, False, 0)
 
     def _startButtonSetUp(self):
         self.startButton = Gtk.Button("Start")
         self.startButton.connect("clicked", self._onStartClick)
-        self.box.pack_start(self.startButton, True, True, 0)
+        self.box.pack_start(self.startButton, False, False, 0)
 
     def _boardSetUp(self):
+        self.gameBox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
         self.grid = Gtk.Grid()
         self.grid.set_size_request(560, 560)
-        self.grid.set_hexpand(True)
-        self.grid.set_vexpand(True)
-        self.box.pack_start(self.grid, True, True, 0)
+        self.gameBox.pack_start(self.grid, False, False, 0)
+        self.box.pack_start(self.gameBox, False, False, 0)
 
         for i in range(8 * 8):
             newButton = Gtk.Button()
@@ -133,9 +159,9 @@ class AppScreen(Gtk.Window):
             x = getX(i)
             y = getY(i)
             if (x + y) % 2 == 0:
-                newButton.override_background_color(0, rgba_white)
+                newButton.set_name("whitesquare")
             else:
-                newButton.override_background_color(0, rgba_black)
+                newButton.set_name("blacksquare")
             self.grid.attach(newButton, x, y, 1, 1)
 
     def _onStartClick(self, btn):
@@ -166,23 +192,21 @@ class AppScreen(Gtk.Window):
             return
         x = self.grid.child_get_property(btn, "top-attach")
         y = self.grid.child_get_property(btn, "left-attach")
-        print(x)
-        print(y)
 
         if self.engine.getCurrentPosition() == (x, y):
-            btn.override_background_color(0, rgba_green)
+            btn.set_name("greensquare")
             self.engine.counterAdd()
             self.engine.getNextPosition()
             self.coord.set_label(self.engine.getCurrentNotation())
             self.score.set_label(str(self.engine.getCounter()))
             return
-        btn.override_background_color(0, rgba_red)
+        btn.set_name("redsquare")
 
     def _onSquareRelease(self, btn):
         x = self.grid.child_get_property(btn, "top-attach")
         y = self.grid.child_get_property(btn, "left-attach")
 
         if (x + y) % 2 == 0:
-            btn.override_background_color(0, rgba_white)
+            btn.set_name("whitesquare")
         else:
-            btn.override_background_color(0, rgba_black)
+            btn.set_name("blacksquare")
