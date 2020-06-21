@@ -1,17 +1,16 @@
 import gi
 
+from src.common.CommonDefs import *
+
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, GLib, Gdk
 
-from src.AppModel import AppModel
+from src.common.AppModel import AppModel
 
 rgba_white = Gdk.RGBA.from_color(Gdk.color_parse('#faf0e6'))
 rgba_black = Gdk.RGBA.from_color(Gdk.color_parse('#a0522d'))
 rgba_green = Gdk.RGBA.from_color(Gdk.color_parse('green'))
 rgba_red = Gdk.RGBA.from_color(Gdk.color_parse('red'))
-
-TIME_LIMIT = 3000
-TIME_INTERVAL = 10
 
 
 class AppScreen(Gtk.Window):
@@ -21,12 +20,9 @@ class AppScreen(Gtk.Window):
         self.gameFlag = False
         self.timeCounter = TIME_LIMIT
 
-        #self.set_size_request(600, 800)
         self.set_default_size(600, 800)
 
-
         self.box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
-        #self.box.set_size_request(600, 800)
         self.add(self.box)
         self._OverviewSetUp()
         self._boardSetUp()
@@ -34,26 +30,58 @@ class AppScreen(Gtk.Window):
         self.box.pack_start(self.progressbar, True, True, 0)
         self._startButtonSetUp()
         self._statsSetUp()
+        self._makeItPretty()
+
+    def _makeItPretty(self):
+        css = b"""
+        #overview {
+            border: 2px solid gray;
+            border-radius: 10px;
+            padding: 0 8px;
+            background: cornsilk;
+        }
+        
+        #stats {
+            border: 2px solid gray;
+            border-radius: 10px;
+            padding: 0 8px;
+            background: cornsilk;
+        }
+        
+        #start {
+            border-style: solid;
+            border-color: gray;
+            border-width: 2px;
+            border-radius: 10px;
+            background: cornsilk;
+        }
+        
+        """
+
+        self.overview.set_name("overview")
+        self.scoreStatic.set_name("stats")
+        self.score.set_name("stats")
+        self.coordStatic.set_name("stats")
+        self.coord.set_name("stats")
+        self.startButton.set_name("start")
+
+        css_provider = Gtk.CssProvider()
+        css_provider.load_from_data(css)
+        context = Gtk.StyleContext()
+        screen = Gdk.Screen.get_default()
+        context.add_provider_for_screen(screen, css_provider,
+                                        Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
     def _OverviewSetUp(self):
-        style =   """
-        border: 2px solid gray;
-        border-radius: 10px;
-        padding: 0 8px;
-        background: cornsilk;
-        word-wrap: break-word;"""
         self.overviewBox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        self.overview = Gtk.Label("Witaj! Gra polega na poprawnym wybraniu jak największej liczby pól szachowych"
-        " w ciągu 30 sekund. Za każde poprawnie wybrane pole zdobywasz o 1 punkt więcej."
-        " Prawdopodobnie zauważyłeś, że szachownica jest ustawiona z punktu widzenia białych."
-        " Współrzędne kolejnych pól będą wyświetlane w prawym dolnym rogu ekranu. Zacznij grę klikając 'Start'"
-        ". Powodzenia!")
+        self.overview = Gtk.Label(OVERVIEW_TEXT)
+
         self.overview.set_line_wrap(True)
         self.overviewBox.pack_start(self.overview, True, True, 0)
         self.box.pack_start(self.overviewBox, True, True, 0)
 
     def _statsSetUp(self):
-        style =   """
+        style = """
         text-align: center;
         border: 2px solid gray;
         border-radius: 10px;
