@@ -30,7 +30,7 @@ class AppScreen(QWidget):
         style = """ 
         border: 2px solid gray;
         border-radius: 10px;
-        padding: 0 8px;
+        padding: 8px;
         background: cornsilk;"""
         overviewLayout = QVBoxLayout()
         self.overview = QLabel(OVERVIEW_TEXT)
@@ -45,10 +45,9 @@ class AppScreen(QWidget):
 
     def _statsSetUp(self):
         style = """ 
-        text-align: center;
         border: 2px solid gray;
         border-radius: 10px;
-        padding: 0 8px;
+        padding: 8px;
         background: cornsilk;
         selection-background-color: darkgray;"""
         self.stats = QHBoxLayout()
@@ -56,18 +55,22 @@ class AppScreen(QWidget):
         self.scoreStatic = QLabel("Aktualny wynik:")
         self.scoreStatic.setMaximumHeight(40)
         self.scoreStatic.setStyleSheet(style)
+        self.scoreStatic.setAlignment(QtCore.Qt.AlignCenter)
 
         self.score = QLabel("0")
         self.score.setMaximumHeight(40)
         self.score.setStyleSheet(style)
+        self.score.setAlignment(QtCore.Qt.AlignCenter)
 
         self.coordStatic = QLabel("Znajdź:")
         self.coordStatic.setMaximumHeight(40)
         self.coordStatic.setStyleSheet(style)
+        self.coordStatic.setAlignment(QtCore.Qt.AlignCenter)
 
         self.coord = QLabel("")
         self.coord.setMaximumHeight(40)
         self.coord.setStyleSheet(style)
+        self.coord.setAlignment(QtCore.Qt.AlignCenter)
 
         self.stats.addWidget(self.scoreStatic)
         self.stats.addWidget(self.score)
@@ -85,7 +88,7 @@ class AppScreen(QWidget):
         selection-background-color: darkgray;"""
         self.startButton = QPushButton('Start', self)
         self.startButton.setStyleSheet(style)
-        self.startButton.setMaximumHeight(40)
+        self.startButton.setMinimumHeight(40)
         self.mainLayout.addWidget(self.startButton)
         self.startButton.clicked.connect(self._onButtonStart)
 

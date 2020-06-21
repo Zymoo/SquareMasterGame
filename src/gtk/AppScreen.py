@@ -22,7 +22,7 @@ class AppScreen(Gtk.Window):
 
         self.set_default_size(600, 800)
 
-        self.box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+        self.box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.add(self.box)
         self._OverviewSetUp()
         self._boardSetUp()
@@ -37,29 +37,47 @@ class AppScreen(Gtk.Window):
         #overview {
             border: 2px solid gray;
             border-radius: 10px;
-            padding: 0 8px;
+            margin: 8px;
             background: cornsilk;
+            font-family: Arial, Helvetica;
+            font-size: 15px;
         }
         
         #stats {
             border: 2px solid gray;
+            padding: 0px;
             border-radius: 10px;
-            padding: 0 8px;
+            margin: 8px;
             background: cornsilk;
+            min-height: 40px;
         }
         
         #start {
+            margin: 8px;
+            padding: 0px;
             border-style: solid;
             border-color: gray;
             border-width: 2px;
             border-radius: 10px;
             background: cornsilk;
+            min-height: 40px;
         }
         
+        progress {
+            min-height: 20px;
+        }
+        
+            progressbar, trough {
+            min-height: 20px;
+            margin: 8px;
+        }
+    
         """
 
         self.overview.set_name("overview")
+
         self.scoreStatic.set_name("stats")
+        self.scoreStatic.set_justify(Gtk.Justification.LEFT)
         self.score.set_name("stats")
         self.coordStatic.set_name("stats")
         self.coord.set_name("stats")
@@ -81,21 +99,11 @@ class AppScreen(Gtk.Window):
         self.box.pack_start(self.overviewBox, True, True, 0)
 
     def _statsSetUp(self):
-        style = """
-        text-align: center;
-        border: 2px solid gray;
-        border-radius: 10px;
-        padding: 0 8px;
-        background: cornsilk;
-        selection-background-color: darkgray;"""
-        self.stats = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
+        self.stats = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, homogeneous=True)
 
         self.scoreStatic = Gtk.Label("Aktualny wynik:")
-
         self.score = Gtk.Label("0")
-
         self.coordStatic = Gtk.Label("Znajdź:")
-
         self.coord = Gtk.Label("")
 
         self.stats.add(self.scoreStatic)
@@ -105,16 +113,8 @@ class AppScreen(Gtk.Window):
         self.box.pack_start(self.stats, True, True, 0)
 
     def _startButtonSetUp(self):
-        style = """
-        border-style: solid;
-        border-color: gray;
-        border-width: 2px;
-        border-radius: 10px;
-        background: cornsilk;
-        selection-background-color: darkgray;"""
         self.startButton = Gtk.Button("Start")
         self.startButton.connect("clicked", self._onStartClick)
-        # self.startButton.setMaximumHeight(40)
         self.box.pack_start(self.startButton, True, True, 0)
 
     def _boardSetUp(self):
@@ -145,6 +145,7 @@ class AppScreen(Gtk.Window):
         self.startButton.set_label("Start")
         self.gameFlag = True
         self.timeout_id = GLib.timeout_add(TIME_INTERVAL, self._onClockChanged)
+        self.timeCounter = TIME_LIMIT
 
         self.engine.counterReset()
         self.engine.getNextPosition()
