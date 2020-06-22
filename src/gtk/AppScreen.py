@@ -43,6 +43,7 @@ class AppScreen(Gtk.Window):
             color: black;
             border: 2px solid gray;
             border-radius: 10px;
+            padding: 6px;
             margin: 8px;
             background: cornsilk;
             font-family: Arial, Helvetica;
@@ -205,6 +206,7 @@ class AppScreen(Gtk.Window):
     def _onClockChanged(self):
         if (self.timeCounter == 0) or (self.gameFlag is False):
             self.startButton.set_sensitive(True)
+            self.stopButton.set_sensitive(False)
             self.gameFlag = False
             return False
         self.timeCounter -= 1

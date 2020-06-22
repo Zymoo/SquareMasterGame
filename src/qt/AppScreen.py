@@ -176,6 +176,7 @@ class AppScreen(QWidget):
     def _onClockChanged(self):
         if (self.timeCounter == 0) or (self.gameFlag is False):
             self.startButton.setEnabled(True)
+            self.stopButton.setEnabled(False)
             self.gameFlag = False
         self.timeCounter -= 1
         self.progress.setValue(self.timeCounter)
