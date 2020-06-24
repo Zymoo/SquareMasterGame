@@ -4,8 +4,8 @@ from PySide2.QtGui import QFont
 from PySide2.QtWidgets import QVBoxLayout, QGridLayout, QProgressBar, QPushButton, \
     QSizePolicy, QButtonGroup, QHBoxLayout, QLabel, QWidget
 
-from src.common.AppModel import AppModel
-from src.common.Commons import *
+from AppModel import AppModel
+from Commons import *
 
 
 class AppScreen(QWidget):

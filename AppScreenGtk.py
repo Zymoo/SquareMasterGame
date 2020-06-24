@@ -1,11 +1,11 @@
 import gi
 
-from src.common.Commons import *
+from Commons import *
 
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, GLib, Gdk
 
-from src.common.AppModel import AppModel
+from AppModel import AppModel
 
 
 class AppScreen(Gtk.Window):

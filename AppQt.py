@@ -1,8 +1,8 @@
 import sys
 
-from PyQt5.QtWidgets import *
+from PySide2.QtWidgets import QApplication
 
-from src.pyqt.AppScreen import AppScreen
+from AppScreenQt import AppScreen
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

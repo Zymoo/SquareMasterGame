@@ -4,8 +4,8 @@ from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QVBoxLayout, QGridLayout, QProgressBar, QPushButton, \
     QSizePolicy, QButtonGroup, QHBoxLayout, QLabel, QWidget
 
-from src.common.AppModel import AppModel
-from src.common.Commons import *
+from AppModel import AppModel
+from Commons import *
 
 
 class AppScreen(QWidget):
