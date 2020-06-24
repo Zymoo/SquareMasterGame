@@ -8,7 +8,7 @@ from gi.repository import Gtk, GLib, Gdk
 from AppModel import AppModel
 
 
-class AppScreen(Gtk.Window):
+class AppScreenG(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self, title="Mistrz szachownicy GTK")
 

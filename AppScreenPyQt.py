@@ -8,7 +8,7 @@ from AppModel import AppModel
 from Commons import *
 
 
-class AppScreen(QWidget):
+class AppScreenQ(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Mistrz szachownicy QT")
