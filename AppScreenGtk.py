@@ -132,14 +132,18 @@ class AppScreenG(Gtk.Window):
             self,
             0,
             Gtk.MessageType.OTHER,
-            Gtk.ButtonsType.NONE,
+            Gtk.ButtonsType.OK,
             "Opis gry!",
         )
         dialog.set_modal(False)
         dialog.format_secondary_text(
             OVERVIEW_TEXT
         )
+        dialog.connect("response", self._onDialogResponse)
         dialog.show()
+
+    def _onDialogResponse(self, widget, response_id):
+        widget.destroy()
 
     def _progressBarSetUp(self):
         self.progressbar = Gtk.ProgressBar()

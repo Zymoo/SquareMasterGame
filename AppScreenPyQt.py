@@ -41,12 +41,18 @@ class AppScreenQ(QMainWindow):
     def _overviewDisplay(self):
         dlg = QDialog(self)
         dlg.setWindowTitle("Opis gry!")
-        overviewLayout = QHBoxLayout()
+        overviewLayout = QVBoxLayout()
         overview = QLabel(OVERVIEW_TEXT)
         overview.setWordWrap(True)
         overviewLayout.addWidget(overview)
+
+        buttonBox = QDialogButtonBox(QDialogButtonBox.Ok)
+        buttonBox.accepted.connect(dlg.accept)
+        overviewLayout.addWidget(buttonBox)
+
         dlg.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         dlg.setLayout(overviewLayout)
+
         dlg.show()
 
     def _statsSetUp(self):
