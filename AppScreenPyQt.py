@@ -45,6 +45,7 @@ class AppScreenQ(QMainWindow):
         overview = QLabel(OVERVIEW_TEXT)
         overview.setWordWrap(True)
         overviewLayout.addWidget(overview)
+        dlg.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         dlg.setLayout(overviewLayout)
         dlg.show()
 

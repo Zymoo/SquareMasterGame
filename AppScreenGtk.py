@@ -16,14 +16,14 @@ class AppScreenG(Gtk.Window):
         self.gameFlag = False
         self.timeCounter = TIME_LIMIT
 
-        self.set_default_size(800, 900)
-        self.set_size_request(800, 900)
+        self.set_default_size(800, 800)
+        self.set_size_request(800, 800)
         self.box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         self.add(self.box)
-        self._overviewSetUp()
+        self._menuSetUp()
         self._boardSetUp()
         self._progressBarSetUp()
-        self._menuSetUp()
+        self._controlSetUp()
         self._statsSetUp()
         self._makeItPretty()
 
@@ -38,17 +38,6 @@ class AppScreenG(Gtk.Window):
         
         button:disabled * {
             color:gray
-        }
-        
-        #overview {
-            color: black;
-            border: 2px solid gray;
-            border-radius: 10px;
-            padding: 6px;
-            margin: 8px;
-            background: cornsilk;
-            font-family: Arial, Helvetica;
-            font-size: 15px;
         }
         
         #stats {
@@ -107,8 +96,6 @@ class AppScreenG(Gtk.Window):
 
         self.box.set_name("boxframe")
 
-        self.overview.set_name("overview")
-
         self.scoreStatic.set_name("stats")
         self.score.set_name("stats")
         self.coordStatic.set_name("stats")
@@ -123,17 +110,40 @@ class AppScreenG(Gtk.Window):
         context.add_provider_for_screen(screen, css_provider,
                                         Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
+    def _menuSetUp(self):
+        menuBar = Gtk.MenuBar()
+
+        menu = Gtk.Menu()
+        overview = Gtk.MenuItem("Menu")
+        overview.set_submenu(menu)
+
+        stat = Gtk.MenuItem("Opis gry")
+        stat.connect("activate", self._overviewDisplay)
+        menu.append(stat)
+
+        menuBar.append(overview)
+
+        menuBox = Gtk.VBox(False, 2)
+        menuBox.pack_start(menuBar, False, False, 0)
+        self.box.pack_start(menuBox, True, True, 0)
+
+    def _overviewDisplay(self, widget):
+        dialog = Gtk.MessageDialog(
+            self,
+            0,
+            Gtk.MessageType.OTHER,
+            Gtk.ButtonsType.NONE,
+            "Opis gry!",
+        )
+        dialog.set_modal(False)
+        dialog.format_secondary_text(
+            OVERVIEW_TEXT
+        )
+        dialog.show()
+
     def _progressBarSetUp(self):
         self.progressbar = Gtk.ProgressBar()
         self.box.pack_start(self.progressbar, False, False, 0)
-
-    def _overviewSetUp(self):
-        self.overviewBox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-        self.overview = Gtk.Label(OVERVIEW_TEXT)
-
-        self.overview.set_line_wrap(True)
-        self.overviewBox.pack_start(self.overview, True, True, 0)
-        self.box.pack_start(self.overviewBox, True, True, 0)
 
     def _statsSetUp(self):
         self.stats = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, homogeneous=True)
@@ -149,7 +159,7 @@ class AppScreenG(Gtk.Window):
         self.stats.add(self.coord)
         self.box.pack_start(self.stats, False, False, 0)
 
-    def _menuSetUp(self):
+    def _controlSetUp(self):
         self.menu = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, homogeneous=True)
 
         self.startButton = Gtk.Button("Start")
