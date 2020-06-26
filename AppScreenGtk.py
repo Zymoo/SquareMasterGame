@@ -117,9 +117,9 @@ class AppScreenG(Gtk.Window):
         overview = Gtk.MenuItem("Menu")
         overview.set_submenu(menu)
 
-        stat = Gtk.MenuItem("Opis gry")
-        stat.connect("activate", self._overviewDisplay)
-        menu.append(stat)
+        menuText = Gtk.MenuItem("Opis gry")
+        menuText.connect("activate", self._overviewDisplay)
+        menu.append(menuText)
 
         menuBar.append(overview)
 

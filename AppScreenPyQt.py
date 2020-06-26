@@ -47,6 +47,7 @@ class AppScreenQ(QMainWindow):
         overviewLayout.addWidget(overview)
 
         buttonBox = QDialogButtonBox(QDialogButtonBox.Ok)
+        buttonBox.setCenterButtons(True)
         buttonBox.accepted.connect(dlg.accept)
         overviewLayout.addWidget(buttonBox)
 
