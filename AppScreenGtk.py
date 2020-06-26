@@ -20,7 +20,7 @@ class AppScreenG(Gtk.Window):
         self.set_size_request(800, 900)
         self.box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         self.add(self.box)
-        self._OverviewSetUp()
+        self._overviewSetUp()
         self._boardSetUp()
         self._progressBarSetUp()
         self._menuSetUp()
@@ -30,6 +30,7 @@ class AppScreenG(Gtk.Window):
     def _makeItPretty(self):
         css = b"""
         button {
+            color: black;
             border-style: solid;
             border-color: gray;
             border-width: 1px;
@@ -126,7 +127,7 @@ class AppScreenG(Gtk.Window):
         self.progressbar = Gtk.ProgressBar()
         self.box.pack_start(self.progressbar, False, False, 0)
 
-    def _OverviewSetUp(self):
+    def _overviewSetUp(self):
         self.overviewBox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
         self.overview = Gtk.Label(OVERVIEW_TEXT)
 

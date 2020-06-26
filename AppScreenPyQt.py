@@ -2,15 +2,16 @@ from PyQt5 import QtCore
 from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QVBoxLayout, QGridLayout, QProgressBar, QPushButton, \
-    QSizePolicy, QButtonGroup, QHBoxLayout, QLabel, QWidget
+    QSizePolicy, QButtonGroup, QHBoxLayout, QLabel, QWidget, QMainWindow, QAction, QMessageBox, QDialog, \
+    QDialogButtonBox
 
 from AppModel import AppModel
 from Commons import *
 
 
-class AppScreenQ(QWidget):
+class AppScreenQ(QMainWindow):
     def __init__(self):
-        super().__init__()
+        super(AppScreenQ, self).__init__()
         self.setWindowTitle("Mistrz szachownicy QT")
 
         self.timeCounter = TIME_LIMIT
@@ -19,37 +20,39 @@ class AppScreenQ(QWidget):
         self.engine = AppModel()
 
         self.mainLayout = QVBoxLayout()
-        self.setMinimumSize(800, 900)
-        self._OverviewSetUp()
+        self.setMinimumSize(800, 800)
+        self._menuSetUp()
         self._boardSetUp()
         self._progressSetUp()
-        self._menuSetUp()
+        self._controlSetUp()
         self._statsSetUp()
 
-        self.setLayout(self.mainLayout)
+        widget = QWidget()
+        widget.setLayout(self.mainLayout)
+        self.setCentralWidget(widget)
+        self.show()
 
-    def _OverviewSetUp(self):
-        style = """ 
-        border: 2px solid gray;
-        border-radius: 10px;
-        padding: 8px;
-        background: cornsilk;"""
+    def _menuSetUp(self):
+        fileMenu = self.menuBar().addMenu("&Menu")
+        newAct = QAction('Opis', self)
+        newAct.triggered.connect(self._overviewDisplay)
+        fileMenu.addAction(newAct)
+
+    def _overviewDisplay(self):
+        dlg = QDialog(self)
+        dlg.setWindowTitle("Opis gry!")
         overviewLayout = QHBoxLayout()
-        self.overview = QLabel(OVERVIEW_TEXT)
-        self.overview.setWordWrap(True)
-        font = QFont("Arial", 11)
-        self.overview.setFont(font)
-
-        self.overview.setStyleSheet(style)
-        overviewLayout.addWidget(self.overview)
-        self.mainLayout.addLayout(overviewLayout)
+        overview = QLabel(OVERVIEW_TEXT)
+        overview.setWordWrap(True)
+        overviewLayout.addWidget(overview)
+        dlg.setLayout(overviewLayout)
+        dlg.show()
 
     def _statsSetUp(self):
         style = """ 
         border: 2px solid gray;
         border-radius: 10px;
         padding: 8px;
-        background: cornsilk;
         selection-background-color: darkgray;"""
         self.stats = QHBoxLayout()
 
@@ -83,14 +86,12 @@ class AppScreenQ(QWidget):
         self.stats.addWidget(self.coord)
         self.mainLayout.addLayout(self.stats)
 
-    def _menuSetUp(self):
+    def _controlSetUp(self):
         style = """ 
         border-style: solid;
         border-color: gray;
         border-width: 2px;
-        border-radius: 10px;
-        background: cornsilk;
-        selection-background-color: darkgray;"""
+        border-radius: 10px;"""
 
         self.menu = QHBoxLayout()
 
