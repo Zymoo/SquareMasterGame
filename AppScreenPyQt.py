@@ -34,7 +34,7 @@ class AppScreenQ(QMainWindow):
 
     def _menuSetUp(self):
         fileMenu = self.menuBar().addMenu("&Menu")
-        newAct = QAction('Opis', self)
+        newAct = QAction('Opis gry', self)
         newAct.triggered.connect(self._overviewDisplay)
         fileMenu.addAction(newAct)
 
